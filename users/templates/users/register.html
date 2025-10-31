@@ -1,0 +1,23 @@
+{% extends "base.html" %}    #change it later
+
+{% block content %}
+    <div class = "container mt-4">
+        <h2>Register</h2>
+        <form method = "post">
+            {% csrf_token %}
+            <fieldset class = "form-group">
+                <legend class = "border-bottom mb-4">Create New Account</legend>
+                {{ form }}
+            </fieldset>
+            <div class = "form-group">
+                <button class = "btn btn-outline-info" type = "submit">Sign Up</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already Have an account? <a class="ml-2" href="#">Log In</a>
+            </small>
+        </div>
+    </div>
+
+{% endblock content %}
