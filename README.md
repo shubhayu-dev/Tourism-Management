@@ -7,6 +7,7 @@ This project uses **Django (backend)**, **MySQL (database)**, and will integrate
 
 ## 🧩 Project Setup (For All Contributors)
 
+
 ### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/<your-username>/<repo-name>.git
@@ -37,9 +38,6 @@ pip install django mysqlclient python-dotenv
 Then generate the requirements.txt file (only once, by any one teammate):
 
 pip freeze > requirements.txt
-
-
-Other teammates can later install everything using:
 
 pip install -r requirements.txt
 
