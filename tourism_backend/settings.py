@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "users.apps.UsersConfig",
-    "bookings.apps.BookingsConfig"
+    "bookings.apps.BookingsConfig",
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +137,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACK = 'bootstrap5'
+
+LOGIN_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
