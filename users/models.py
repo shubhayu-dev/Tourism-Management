@@ -31,13 +31,7 @@ class UserManager(BaseUserManager):
         
         return self.create_user(email, username, password, **extra_fields)
 class User(AbstractUser, PermissionsMixin):
-    
-    user_id = models.AutoField(
-        primary_key=True,
-        default = uuid.uuid4,
-        editable = False,
-        unique = True
-        )
+    user_id = models.BigAutoField(primary_key=True)
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30)
@@ -47,11 +41,10 @@ class User(AbstractUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(null=True, blank=True)
-    
+
     objects = UserManager()
-    
-    # Authentication settings
-    USERNAME_FIELD = 'email'  # Use email for login
+
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
 # Meta for display
