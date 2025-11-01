@@ -1,23 +1,31 @@
-{% extends "base.html" %}    #change it later
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-    <div class = "container mt-4">
-        <h2>Register</h2>
-        <form method = "post">
-            {% csrf_token %}
-            <fieldset class = "form-group">
-                <legend class = "border-bottom mb-4">Create New Account</legend>
-                {{ form }}
-            </fieldset>
-            <div class = "form-group">
-                <button class = "btn btn-outline-info" type = "submit">Sign Up</button>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="text-center mb-4">Register</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Create New Account</legend>
+                                {{ form|crispy }}
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-outline-info btn-block" type="submit">Sign Up</button>
+                            </div>
+                        </form>
+                        <div class="border-top pt-3 text-center">
+                            <small class="text-muted">
+                                Already Have an account? <a href="{% url 'login' %}">Log In</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Already Have an account? <a class="ml-2" href="#">Log In</a>
-            </small>
         </div>
     </div>
-
 {% endblock content %}
