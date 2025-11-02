@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users.apps.UsersConfig",
     "bookings.apps.BookingsConfig",
+    'guide.apps.GuideConfig',
     'crispy_forms',
     'crispy_bootstrap5',
 ]
@@ -142,4 +143,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = 'login'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
