@@ -20,6 +20,8 @@ from django.urls import path, include
 from users import views as user_views
 from bookings import views as bookings
 from django.urls import path, include  # <-- Make sure to import include
+from chatbot import urls as chatbot_urls 
+from chatbot import views as chatbot_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -29,4 +31,5 @@ urlpatterns = [
     path("login/", auth_views.LoginView.as_view(template_name='users/login.html'), name="login"),
     path("logout/", auth_views.LogoutView.as_view(template_name='users/logout.html', http_method_names=['get', 'post', 'options', 'head']), name="logout"),
     path('', include('users.urls')),
+    path('chatbot/', include('chatbot.urls')),
 ]
