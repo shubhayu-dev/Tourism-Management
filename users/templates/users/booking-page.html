@@ -1,0 +1,707 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust | Your Next Adventure Awaits</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <script>
+        // Tailwind config from your new UI
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#0D9488',
+                            hover: '#0F766E'
+                        },
+                        accent: {
+                            DEFAULT: '#F97316',
+                            hover: '#EA580C'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* This .hero-bg class now works with the inline style
+          that uses the Django tag.
+          The background-image rule is removed from here.
+        */
+        .hero-bg {
+            background-size: cover;
+            background-position: center 60%;
+            background-attachment: fixed;
+        }
+
+        .glass-filter {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(13, 148, 136, 0.25);
+        }
+        
+        .booking-modal {
+            background-color: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(8px);
+        }
+
+        .loading-spinner {
+            border: 3px solid #E0F2F1;
+            border-top: 3px solid #0D9488;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #0D9488;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0F766E;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0D9488 !important;
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2) !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen antialiased bg-gray-50">
+<main>
+    <section class="hero-bg text-white min-h-screen flex flex-col justify-center relative overflow-hidden"
+             style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('{% static "assets/file.jpg" %}')">
+        
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold mb-6 drop-shadow-2xl leading-tight animate-fade-in-up">
+                Discover Your Next <span class="text-accent">Adventure</span>
+            </h1>
+            <p class="text-lg md:text-2xl mb-12 opacity-90 drop-shadow-xl max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.3s;">
+                Explore breathtaking destinations and create unforgettable memories with our curated travel packages.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 animate-fade-in-up" style="animation-delay: 0.6s;">
+                <button onclick="scrollToPackages()" 
+                        class="bg-white text-teal-700 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 text-lg hover:scale-105">
+                    <span class="flex items-center justify-center gap-2">
+                        <span>Explore Packages</span>
+                        <i data-feather="arrow-down" class="w-5 h-5"></i>
+                    </span>
+                </button>
+                
+                {% if user.is_authenticated %}
+                <button onclick="showMyBookings()" 
+                        class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition-all duration-300 transform hover:-translate-y-1 text-lg hover:scale-105">
+                    <span class="flex items-center justify-center gap-2">
+                        <i data-feather="briefcase" class="w-5 h-5"></i>
+                        <span>My Bookings</span>
+                    </span>
+                </button>
+                {% else %}
+                <a href="/admin/login/" 
+                   class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition-all duration-300 transform hover:-translate-y-1 text-lg hover:scale-105">
+                    <span class="flex items-center justify-center gap-2">
+                        <i data-feather="log-in" class="w-5 h-5"></i>
+                        <span>Client Login</span>
+                    </span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="glass-filter rounded-2xl p-6 md:p-8 mt-20 max-w-6xl mx-auto w-full container relative z-10 animate-fade-in-up" style="animation-delay: 0.9s;">
+            <form method="GET" action="{% url 'home' %}" class="grid md:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label for="destination-search" class="block text-sm font-medium text-white mb-2 flex items-center gap-2">
+                        <i data-feather="map-pin" class="w-4 h-4"></i>
+                        Destination
+                    </label>
+                    <input type="text" name="destination_search" id="destination-search" 
+                           placeholder="e.g., Paris, Tokyo, Bali" 
+                           class="w-full px-4 py-3 border-0 rounded-lg focus:outline-none bg-white/90 text-gray-900 placeholder-gray-500"
+                           value="{{ request.GET.destination_search|default:'' }}">
+                </div>
+                
+                <div>
+                    <label for="price-filter" class="block text-sm font-medium text-white mb-2 flex items-center gap-2">
+                        <i data-feather="dollar-sign" class="w-4 h-4"></i>
+                        Price Range
+                    </label>
+                    <select name="price_filter" id="price-filter" class="w-full px-4 py-3 border-0 rounded-lg focus:outline-none bg-white/90 text-gray-900">
+                        <option value="all" {% if request.GET.price_filter == 'all' %}selected{% endif %}>All Prices</option>
+                        <option value="budget" {% if request.GET.price_filter == 'budget' %}selected{% endif %}>Under $1,200</option>
+                        <option value="mid" {% if request.GET.price_filter == 'mid' %}selected{% endif %}>$1,200 - $2,000</option>
+                        <option value="premium" {% if request.GET.price_filter == 'premium' %}selected{% endif %}>$2,000 - $3,000</option>
+                        <option value="luxury" {% if request.GET.price_filter == 'luxury' %}selected{% endif %}>$3,000+</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="duration-filter" class="block text-sm font-medium text-white mb-2 flex items-center gap-2">
+                        <i data-feather="calendar" class="w-4 h-4"></i>
+                        Duration
+                    </label>
+                    <select name="duration_filter" id="duration-filter" class="w-full px-4 py-3 border-0 rounded-lg focus:outline-none bg-white/90 text-gray-900">
+                        <option value="all" {% if request.GET.duration_filter == 'all' %}selected{% endif %}>All Durations</option>
+                        <option value="short" {% if request.GET.duration_filter == 'short' %}selected{% endif %}>1-6 Days</option>
+                        <option value="medium" {% if request.GET.duration_filter == 'medium' %}selected{% endif %}>7-10 Days</option>
+                        <option value="long" {% if request.GET.duration_filter == 'long' %}selected{% endif %}>11+ Days</option>
+                    </select>
+                </div>
+                
+                <button type="submit"
+                        class="w-full bg-accent text-white px-4 py-3 rounded-lg hover:bg-accent-hover transition-all duration-300 font-semibold text-lg shadow-lg transform hover:scale-105 flex items-center justify-center gap-2">
+                    <i data-feather="search" class="w-5 h-5"></i>
+                    <span>Find Tours</span>
+                </button>
+            </form>
+            
+            {% if request.GET %}
+            <div id="results-count" class="mt-4 text-sm text-white text-center">
+                <span>Showing {{ packages.count }} package{{ packages.count|pluralize }}.</span>
+                <a href="{% url 'home' %}" class="underline hover:text-gray-200 ml-2 transition-colors">Clear Filters</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="packages" class="py-24 bg-gradient-to-b from-white to-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold mb-4 text-gray-800">
+                    Featured <span class="text-primary">Destinations</span>
+                </h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                    Handpicked adventures designed to create memories that last a lifetime
+                </p>
+            </div>
+            
+            <div id="packages-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                
+                {% for package in packages %}
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden card-hover group">
+                    <div class="relative h-64 overflow-hidden">
+                        
+                        {% if package.image %}
+                        <img src="{{ package.image.url }}" alt="{{ package.name }}" loading="lazy"
+                             class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        {% else %}
+                        <div class="h-full w-full bg-teal-50 flex items-center justify-center">
+                            <img src="https://placehold.co/600x400/0D9488/FFFFFF?text={{ package.name|urlencode }}" alt="{{ package.name }}" class="h-full w-full object-cover">
+                        </div>
+                        {% endif %}
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-teal-700 px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+                            <i data-feather="clock" class="w-4 h-4"></i>
+                            {{ package.duration_days }} Days
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-gray-500 mb-2 text-sm font-medium flex items-center gap-2">
+                            <i data-feather="map-pin" class="w-4 h-4"></i>
+                            {{ package.destination }}
+                        </p>
+                        <h3 class="text-2xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">
+                            {{ package.name }}
+                        </h3>
+                        <p class="text-gray-600 mb-6 text-sm leading-relaxed line-clamp-3 flex-grow">
+                            {{ package.description|truncatewords:22 }}
+                        </p>
+                        
+                        <div class="flex justify-between items-center pt-4 border-t border-gray-100 mt-auto">
+                            <div>
+                                <span class="text-xs text-gray-500 block">Starting from</span>
+                                <span class="text-3xl font-bold text-primary">${{ package.price|floatformat:"0" }}</span>
+                            </div>
+                            
+                            <button 
+                                {% if user.is_authenticated %}
+                                    onclick="openBookingModal(this)"
+                                {% else %}
+                                    disabled
+                                    title="Please log in to book"
+                                {% endif %}
+                                class="bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary-hover transition-all duration-300 transform group-hover:-translate-y-1 shadow-md hover:shadow-xl flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                
+                                data-package-id="{{ package.package_id }}"
+                                data-package-name="{{ package.name }}"
+                                data-package-price="{{ package.price }}"
+                                data-package-duration="{{ package.duration_days }}"
+                            >
+                                <span>Book Now</span>
+                                <i data-feather="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if not packages %}
+            <div id="no-results" class="text-center py-16 text-gray-500">
+                <i data-feather="search" class="w-20 h-20 mx-auto mb-6 text-gray-300"></i>
+                <p class="text-2xl font-semibold mb-2">No packages match your filters.</p>
+                <p class="text-lg">Try adjusting your search criteria or 
+                    <a href="{% url 'home' %}" class="text-primary hover:underline font-medium">clear all filters</a>
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="my-bookings" class="py-24 bg-gray-50 hidden">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800">My Bookings</h2>
+                <button onclick="hideMyBookings()" class="text-primary hover:text-primary-hover font-semibold flex items-center gap-2 transition-colors">
+                    <i data-feather="arrow-left" class="w-5 h-5"></i>
+                    <span>Back to Packages</span>
+                </button>
+            </div>
+            
+            <div id="bookings-list" class="space-y-6">
+                {% for booking in my_bookings %}
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-primary hover:shadow-xl transition-all">
+                    <div class="flex flex-col md:flex-row justify-between gap-4">
+                        <div class="flex-1">
+                            
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold capitalize border
+                                {% if booking.status == 'confirmed' %}bg-emerald-100 text-emerald-800 border-emerald-200{% endif %}
+                                {% if booking.status == 'pending' %}bg-amber-100 text-amber-800 border-amber-200{% endif %}
+                                {% if booking.status == 'cancelled' %}bg-red-100 text-red-800 border-red-200{% endif %}
+                                {% if booking.status == 'completed' %}bg-blue-100 text-blue-800 border-blue-200{% endif %}
+                            ">
+                                {{ booking.status }}
+                            </span>
+
+                            <h3 class="text-2xl font-bold text-gray-800 mt-3 mb-2">{{ booking.package.name }}</h3>
+                            <div class="flex items-center text-gray-600 text-sm mb-4 gap-2">
+                                <i data-feather="calendar" class="w-4 h-4"></i>
+                                <span>Travel Date: <strong class="text-gray-800">{{ booking.travel_date|date:"F d, Y" }}</strong></span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <p class="text-gray-600 flex items-center gap-2">
+                                    <i data-feather="check-circle" class="w-4 h-4 text-primary"></i>
+                                    <span><strong>Booked:</strong> {{ booking.created_at|date:"M d, Y" }}</span>
+                                </p>
+                                <p class="text-gray-600 flex items-center gap-2">
+                                    <i data-feather="users" class="w-4 h-4 text-primary"></i>
+                                    <span><strong>Guests:</strong> {{ booking.number_of_people }}</span>
+                                </p>
+                                <p class="text-gray-600 flex items-center gap-2">
+                                    <i data-feather="map-pin" class="w-4 h-4 text-primary"></i>
+                                    <span>{{ booking.package.destination }}</span>
+                                </p>
+                                <p class="text-gray-600 flex items-center gap-2">
+                                    <i data-feather="hash" class="w-4 h-4 text-primary"></i>
+                                    <span>ID: {{ booking.booking_id }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-left md:text-right">
+                            <p class="text-3xl font-bold text-primary mb-2">${{ booking.total_amount|floatformat:2 }}</p>
+                            <span class="text-sm text-gray-600">(Total)</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if not my_bookings and user.is_authenticated %}
+            <div id="no-bookings" class="text-center py-16 text-gray-500">
+                <i data-feather="briefcase" class="w-20 h-20 mx-auto mb-6 text-gray-300"></i>
+                <p class="text-2xl font-semibold mb-2">No bookings yet</p>
+                <p class="text-lg">Start exploring our 
+                    <button onclick="hideMyBookings(); scrollToPackages();" class="text-primary hover:underline font-medium">amazing packages</button>!
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<div id="booking-modal" class="fixed inset-0 booking-modal hidden items-center justify-center z-50 p-4">
+    
+    <form id="booking-form" class="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[95vh] overflow-y-auto shadow-2xl relative transform transition-all scale-95" 
+          onsubmit="completeBooking(event)">
+        
+        {% csrf_token %}
+        <input type="hidden" id="package-id-input" name="package_id">
+
+        <button type="button" onclick="closeBookingModal()" 
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors" 
+                aria-label="Close modal">
+            <i data-feather="x" class="w-6 h-6"></i>
+        </button>
+
+        <h3 id="modal-title" class="text-3xl font-bold mb-6 text-gray-800 text-center">
+            Complete Your Booking
+        </h3>
+        
+        <div class="bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl p-6 mb-6 border border-primary/20">
+            <h4 class="font-semibold text-lg mb-4 text-gray-800 flex items-center gap-2">
+                <i data-feather="info" class="w-5 h-5 text-primary"></i>
+                Booking Summary
+            </h4>
+            <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Package:</span>
+                    <span id="summary-package-name" class="font-medium text-gray-900"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Duration:</span>
+                    <span id="summary-duration" class="font-medium text-gray-900"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Price per person:</span>
+                    <span id="summary-price" class="font-medium text-gray-900"></span>
+                </div>
+                <hr class="border-gray-300">
+                <div class="flex justify-between items-center font-bold text-xl">
+                    <span class="text-gray-800">Total Cost:</span>
+                    <span id="summary-total" class="text-primary"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label for="full-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                <input type="text" id="full-name" name="full_name" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all" 
+                       placeholder="John Doe"
+                       value="{{ user.get_full_name|default:'' }}">
+            </div>
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                <input type="email" id="email" name="email" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all" 
+                       placeholder="john@example.com"
+                       value="{{ user.email|default:'' }}">
+            </div>
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
+                <input type="tel" id="phone" name="phone" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all" 
+                       placeholder="+1 (555) 123-4567">
+            </div>
+            <div>
+                <label for="travel-date" class="block text-sm font-medium text-gray-700 mb-2">Travel Date *</label>
+                <input type="date" id="travel-date" name="travel_date" required 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all">
+            </div>
+            <div>
+                <label for="num-people" class="block text-sm font-medium text-gray-700 mb-2">Number of People *</label>
+                <input type="number" id="num-people" name="number_of_people" required min="1" value="1" 
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all"
+                       oninput="updateTotalCost()">
+            </div>
+            <div class="md:col-span-2">
+                <label for="special-requests" class="block text-sm font-medium text-gray-700 mb-2">Special Requests</label>
+                <textarea id="special-requests" name="special_requests" rows="3" 
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg transition-all" 
+                          placeholder="Dietary requirements, accessibility needs, etc."></textarea>
+            </div>
+        </div>
+        
+        <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200">
+            <button type="button" onclick="closeBookingModal()" 
+                    class="bg-gray-100 text-gray-700 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition-all">
+                Cancel
+            </button>
+            <button type="submit" id="submit-btn"
+                    class="bg-accent text-white px-8 py-3 rounded-full font-semibold hover:bg-accent-hover transition-all flex items-center gap-2 min-w-[180px] justify-center">
+                <i data-feather="check" class="w-5 h-5"></i>
+                <span>Confirm Booking</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<div id="toast" class="fixed top-6 right-6 z-[100] transition-all duration-300 transform translate-x-full opacity-0 pointer-events-none">
+    <div class="max-w-sm w-full bg-white shadow-2xl rounded-xl overflow-hidden border-l-4" id="toast-container">
+        <div class="p-4">
+            <div class="flex items-start gap-3">
+                <div id="toast-icon" class="flex-shrink-0"></div>
+                <div class="flex-1">
+                    <p id="toast-title" class="text-sm font-semibold text-gray-900"></p>
+                    <p id="toast-message" class="mt-1 text-sm text-gray-600"></p>
+                </div>
+                <button onclick="hideToast()" class="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                    <i data-feather="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// --- CSRF Token Helper ---
+// This is ESSENTIAL for making POST requests with Django
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+// State
+let currentPackagePrice = 0;
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    feather.replace();
+    setMinTravelDate();
+});
+
+// Modal Functions
+function openBookingModal(button) {
+    // Read data from the button's data-* attributes
+    currentPackagePrice = parseFloat(button.dataset.packagePrice);
+    
+    document.getElementById('package-id-input').value = button.dataset.packageId;
+    document.getElementById('modal-title').textContent = `Book: ${button.dataset.packageName}`;
+    document.getElementById('summary-package-name').textContent = button.dataset.packageName;
+    document.getElementById('summary-duration').textContent = `${button.dataset.packageDuration} Days`;
+    document.getElementById('summary-price').textContent = `$${currentPackagePrice.toLocaleString()}`;
+    
+    document.getElementById('num-people').value = 1;
+    updateTotalCost();
+    
+    const modal = document.getElementById('booking-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+        modal.querySelector('form').classList.remove('scale-95');
+        modal.querySelector('form').classList.add('scale-100');
+    }, 10);
+    
+    feather.replace();
+}
+
+function closeBookingModal() {
+    const modal = document.getElementById('booking-modal');
+    modal.querySelector('form').classList.remove('scale-100');
+    modal.querySelector('form').classList.add('scale-95');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.getElementById('booking-form').reset();
+    }, 200);
+}
+
+function updateTotalCost() {
+    const people = parseInt(document.getElementById('num-people').value) || 1;
+    if (people < 1) {
+        document.getElementById('num-people').value = 1;
+        people = 1;
+    }
+    const total = people * currentPackagePrice;
+    document.getElementById('summary-total').textContent = `$${total.toLocaleString()}`;
+}
+
+// This function now posts to your Django backend
+async function completeBooking(event) {
+    event.preventDefault();
+
+    const form = document.getElementById('booking-form');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
+    const submitBtn = document.getElementById('submit-btn');
+    const originalContent = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+    
+    // Collect form data
+    const formData = new FormData(form);
+    const bookingData = Object.fromEntries(formData.entries());
+    // Ensure number is an integer
+    bookingData.number_of_people = parseInt(bookingData.number_of_people);
+
+    try {
+        // This URL must match a path in your client/urls.py
+        const response = await fetch("{% url 'create_booking' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify(bookingData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Booking failed. Please check your details.');
+        }
+
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Booking Confirmed!', `Your booking for ${bookingData.full_name} has been confirmed.`, 'success');
+            closeBookingModal();
+            // We can't easily update the 'My Bookings' section without a page reload,
+            // so we'll just let the user see it next time they click the button or refresh.
+            // For an advanced app, you'd fetch and re-render the bookings list here.
+            // A simple refresh is also an option:
+            // location.reload(); 
+        } else {
+            throw new Error(result.error || 'An unknown error occurred.');
+        }
+
+    } catch (error) {
+        console.error('Booking Error:', error);
+        showToast('Booking Error', error.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalContent;
+        feather.replace(); // Re-apply icon to button
+    }
+}
+
+// Navigation Functions
+function scrollToPackages() {
+    document.getElementById('packages').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showMyBookings() {
+    // This just shows the section pre-rendered by Django.
+    document.getElementById('packages').classList.add('hidden');
+    document.getElementById('my-bookings').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function hideMyBookings() {
+    document.getElementById('my-bookings').classList.add('hidden');
+    document.getElementById('packages').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Utility Functions
+function setMinTravelDate() {
+    const today = new Date();
+    today.setDate(today.getDate() + 1);
+    const minDate = today.toISOString().split('T')[0];
+    document.getElementById('travel-date').min = minDate;
+}
+
+// Toast Notification
+let toastTimeout;
+function showToast(title, message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const container = document.getElementById('toast-container');
+    const iconEl = document.getElementById('toast-icon');
+    
+    document.getElementById('toast-title').textContent = title;
+    document.getElementById('toast-message').textContent = message;
+    
+    if (type === 'success') {
+        container.style.borderLeftColor = '#10b981';
+        iconEl.innerHTML = '<i data-feather="check-circle" class="w-6 h-6 text-emerald-500"></i>';
+    } else {
+        container.style.borderLeftColor = '#ef4444';
+        iconEl.innerHTML = '<i data-feather="alert-circle" class="w-6 h-6 text-red-500"></i>';
+    }
+    
+    feather.replace();
+    
+    toast.classList.remove('translate-x-full', 'opacity-0', 'pointer-events-none');
+    toast.classList.add('translate-x-0', 'opacity-100', 'pointer-events-auto');
+    
+    if (toastTimeout) clearTimeout(toastTimeout);
+    
+    toastTimeout = setTimeout(() => {
+        hideToast();
+    }, 5000);
+}
+
+function hideToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('translate-x-full', 'opacity-0');
+    toast.classList.remove('translate-x-0', 'opacity-100');
+    setTimeout(() => {
+        toast.classList.add('pointer-events-none');
+    }, 300);
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('booking-modal');
+        if (!modal.classList.contains('hidden')) {
+            closeBookingModal();
+        }
+    }
+});
+</script>
+
+</body>
+</html>
