@@ -17,11 +17,11 @@ python manage.py shell
 
 Then type:
 
-from packages.models import Package
+from bookings.models import Package
 from django.contrib.auth.models import User
 
 # Create a user (or fetch an existing one)
-user, _ = User.objects.get_or_create(username="nikhil", defaults={"email": "nikhil@example.com", "password": "test1234"})
+user, _ = User.objects.get_or_create(username="nikhil", defaults={"email": "shubhayusadhak@gmail.com", "password": "test1234"})
 
 # Add some sample packages
 p1 = Package.objects.create(
