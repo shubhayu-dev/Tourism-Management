@@ -1,0 +1,115 @@
+Now to populate the database (i.e., insert sample data into your Package and Booking tables), you have a few solid options depending on how you want to test it.
+
+Let’s go through the easiest and cleanest ones 👇
+
+🧩 1. Use the Django shell (recommended for manual testing)
+
+After running:
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+You can open the Django shell:
+
+python manage.py shell
+
+
+Then type:
+
+from packages.models import Package
+from django.contrib.auth.models import User
+
+# Create a user (or fetch an existing one)
+user, _ = User.objects.get_or_create(username="nikhil", defaults={"email": "nikhil@example.com", "password": "test1234"})
+
+# Add some sample packages
+p1 = Package.objects.create(
+    name="Goa Beach Retreat",
+    destination="Goa",
+    description="Enjoy sun, sand, and sea with our exclusive Goa package.",
+    duration_days=5,
+    price=14999.99
+)
+
+p2 = Package.objects.create(
+    name="Himalayan Adventure",
+    destination="Manali",
+    description="A thrilling mountain escape for adventure lovers.",
+    duration_days=7,
+    price=24999.00
+)
+
+print("✅ Added Packages:", Package.objects.all())
+
+
+If you want to test Booking too, make sure your guide app exists and at least one Guide entry is present; otherwise, leave it null:
+
+from packages.models import Booking
+
+b1 = Booking.objects.create(
+    package=p1,
+    user=user,
+    full_name="Ravi Sharma",
+    email="ravi@example.com",
+    phone="9876543210",
+    travel_date="2025-11-15",
+    number_of_people=2,
+    total_amount=29999.98
+)
+
+print("✅ Booking created:", b1)
+
+
+Then exit the shell with:
+
+exit()
+
+⚙️ 2. Use Django admin interface (for GUI entry)
+
+If you haven’t already, create a superuser:
+
+python manage.py createsuperuser
+
+
+Then run:
+
+python manage.py runserver
+
+
+Go to http://127.0.0.1:8000/admin
+, log in, and you’ll see your Packages and Bookings models listed — you can add entries directly there.
+
+(Make sure your models are registered in admin.py)
+
+Example:
+
+from django.contrib import admin
+from .models import Package, Booking
+
+admin.site.register(Package)
+admin.site.register(Booking)
+
+🧮 3. (Optional) Load a bulk dataset with fixtures
+
+If you want to preload data automatically, you can create a JSON fixture like packages/fixtures/packages.json:
+
+[
+  {
+    "model": "packages.package",
+    "pk": "1",
+    "fields": {
+      "name": "Goa Beach Retreat",
+      "destination": "Goa",
+      "description": "Enjoy sun, sand, and sea with our exclusive Goa package.",
+      "duration_days": 5,
+      "price": "14999.99",
+      "is_active": true
+    }
+  }
+]
+
+
+Then load it:
+
+python manage.py loaddata packages/fixtures/packages.json
