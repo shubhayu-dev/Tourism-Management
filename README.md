@@ -149,4 +149,4 @@ Environment Management: Python venv
 
 Added chatbot= visit->   http://127.0.0.1:8000/chatbot to see the chatbot
 the app chatbot handles the entire working of the chatbot 
-fine tuning is not done so fine_tuning required 
+fine tuning is not done so fine_tuning required
