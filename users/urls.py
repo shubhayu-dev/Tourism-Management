@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     # This path matches your package_list view and names it 'home'
     # This fixes: NoReverseMatch for 'home'
-    path('book/', views.package_list, name='home'),
+    path('book/', views.package_list, name='book'),
     
     # This path is for your new create_booking_view
     # This fixes the {% url 'create_booking' %} error

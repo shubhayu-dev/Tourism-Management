@@ -192,3 +192,9 @@ header h2 {
     display: block;
   }
 }
+/* Always keep chatbot and toggle above hero sections, modals, etc */
+.chatbot,
+.chatbot-toggler {
+  position: fixed;
+  z-index: 99999;
+}

@@ -82,3 +82,6 @@ def create_booking_view(request):
     except Exception as e:
         # 7. Send an error response if anything goes wrong
         return JsonResponse({'error': str(e)}, status=400)
+
+def req_home(request):
+    return render(request,'users/home.html')
