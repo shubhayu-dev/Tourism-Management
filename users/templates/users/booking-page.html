@@ -10,7 +10,7 @@
              style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('{% static "assets/file.jpg" %}')">
         
         <div class="container mx-auto px-6 text-center relative z-10">
-            <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold mb-6 drop-shadow-2xl leading-tight animate-fade-in-up">
+            <h1 style="z-index: 1" class="text-5xl sm:text-6xl md:text-8xl font-bold mb-6 drop-shadow-2xl leading-tight animate-fade-in-up">
                 Discover Your Next <span class="text-accent">Adventure</span>
             </h1>
             <p class="text-lg md:text-2xl mb-12 opacity-90 drop-shadow-xl max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.3s;">
@@ -67,10 +67,10 @@
                     </label>
                     <select name="price_filter" id="price-filter" class="w-full px-4 py-3 border-0 rounded-lg focus:outline-none bg-white/90 text-gray-900">
                         <option value="all" {% if request.GET.price_filter == 'all' %}selected{% endif %}>All Prices</option>
-                        <option value="budget" {% if request.GET.price_filter == 'budget' %}selected{% endif %}>Under $1,200</option>
-                        <option value="mid" {% if request.GET.price_filter == 'mid' %}selected{% endif %}>$1,200 - $2,000</option>
-                        <option value="premium" {% if request.GET.price_filter == 'premium' %}selected{% endif %}>$2,000 - $3,000</option>
-                        <option value="luxury" {% if request.GET.price_filter == 'luxury' %}selected{% endif %}>$3,000+</option>
+                        <option value="budget" {% if request.GET.price_filter == 'budget' %}selected{% endif %}>Under ₹1,200</option>
+                        <option value="mid" {% if request.GET.price_filter == 'mid' %}selected{% endif %}>₹1,200 - ₹2,000</option>
+                        <option value="premium" {% if request.GET.price_filter == 'premium' %}selected{% endif %}>₹2,000 - ₹3,000</option>
+                        <option value="luxury" {% if request.GET.price_filter == 'luxury' %}selected{% endif %}>₹3,000+</option>
                     </select>
                 </div>
                 
@@ -568,4 +568,5 @@ document.addEventListener('keydown', (e) => {
     }
 });
 </script>
+{% include 'chatbot/index.html' %}
 {% endblock %}
