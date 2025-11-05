@@ -3,4 +3,6 @@ __pycache__/
 *.pyc
 *.log
 .env
-migrations/
+*/migrations/[0-9]*.py
+guide/migrations/
+*/bookings/migrations/
