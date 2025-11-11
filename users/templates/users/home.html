@@ -1,230 +1,396 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block title %}Wanderlust | Discover Your Next Adventure{% endblock %}
-
-{% block content %}
-
-<section class="relative h-screen overflow-hidden">
-    <div class="absolute inset-0">
-        <img id="slider-img-1" src="{% static 'images/mountain-landscape.jpg' %}" alt="Mountain landscape" class="slider-image absolute inset-0 w-full h-full object-cover opacity-100">
-        <img id="slider-img-2" src="{% static 'images/beach-paradise.jpg' %}" alt="Beach paradise" class="slider-image absolute inset-0 w-full h-full object-cover opacity-0">
-        <img id="slider-img-3" src="{% static 'images/european-city.jpg' %}" alt="European city" class="slider-image absolute inset-0 w-full h-full object-cover opacity-0">
-        <img id="slider-img-4" src="{% static 'images/forest-adventure.jpg' %}" alt="Forest adventure" class="slider-image absolute inset-0 w-full h-full object-cover opacity-0">
-        <img id="slider-img-5" src="{% static 'images/sunset-travel.jpg' %}" alt="Sunset travel" class="slider-image absolute inset-0 w-full h-full object-cover opacity-0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust | Discover Your Next Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         
-        <div class="gradient-overlay absolute inset-0"></div>
-    </div>
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .pulse-slow {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 4px 12px rgba(0,0,0,0.4);
+        }
+        
+        .gradient-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        
+        .slider-image {
+            transition: opacity 1.5s ease-in-out;
+        }
+        
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.05) 1px, transparent 1px),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .destination-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .destination-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(251, 191, 36, 0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+        
+        .destination-card:hover::before {
+            opacity: 1;
+        }
+        
+        .destination-card .content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background-size: 1000px 100%;
+            animation: shimmer 3s infinite;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        accent: '#fbbf24',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans">
+    <!-- Hero Section with Slider -->
+    <section class="relative h-screen overflow-hidden">
+        <div class="absolute inset-0">
+            <img id="slider-img-1" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" alt="Mountain landscape" class="slider-image absolute inset-0 w-full h-full object-cover opacity-100">
+            <img id="slider-img-2" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80" alt="Beach paradise" class="slider-image absolute inset-0 w-full h-full object-cover opacity-0">
+            <img id="slider-img-3" src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&q=80" alt="European city" class="slider-image absolute inset-0 w-full h-full object-cover opacity-0">
+            <img id="slider-img-4" src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80" alt="Forest adventure" class="slider-image absolute inset-0 w-full h-full object-cover opacity-0">
+            <img id="slider-img-5" src="https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?w=1920&q=80" alt="Sunset travel" class="slider-image absolute inset-0 w-full h-full object-cover opacity-0">
+            
+            <div class="gradient-overlay absolute inset-0"></div>
+            <div class="absolute inset-0 bg-pattern"></div>
+        </div>
 
-    <div class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-center items-center text-center">
-        <h1 class="text-6xl md:text-8xl font-bold text-white mb-6 text-shadow animate-fade-in">
-            Discover Your
-            <span class="block text-yellow-300">Dream Destination</span>
-        </h1>
-        <p class="text-xl md:text-2xl text-white mb-12 max-w-3xl text-shadow animate-fade-in" style="animation-delay: 0.3s;">
-            Embark on unforgettable journeys to the world's most breathtaking locations. Your adventure starts here.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 animate-fade-in" style="animation-delay: 0.6s;">
-            <a href="{% url 'book' %}" 
-               class="bg-accent text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-yellow-600 transition-all duration-300 shadow-2xl hover:shadow-yellow-500/50 transform hover:scale-110 pulse-slow">
-                Start Your Journey
-            </a>
-            <button onclick="scrollToFeatures()" 
-                    class="bg-white/20 backdrop-blur-md border-2 border-white text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white/30 transition-all duration-300 shadow-2xl transform hover:scale-110">
-                Learn More
+        <div class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-center items-center text-center">
+            <div class="glass-effect px-8 py-4 rounded-full mb-6 animate-fade-in">
+                <p class="text-white text-sm tracking-widest">✈️ YOUR ADVENTURE AWAITS</p>
+            </div>
+            
+            <h1 class="text-6xl md:text-8xl font-bold text-white mb-6 text-shadow animate-fade-in" style="animation-delay: 0.2s;">
+                Discover Your
+                <span class="block bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">Dream Destination</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-white mb-12 max-w-3xl text-shadow animate-fade-in leading-relaxed" style="animation-delay: 0.4s;">
+                Embark on unforgettable journeys to the world's most breathtaking locations. Your adventure starts here.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 animate-fade-in" style="animation-delay: 0.6s;">
+                <button onclick="scrollToDestinations()" 
+                   class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-10 py-5 rounded-full font-bold text-lg hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-2xl hover:shadow-yellow-500/50 transform hover:scale-110 pulse-slow">
+                    Start Your Journey
+                </button>
+                <button onclick="scrollToFeatures()" 
+                        class="glass-effect text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white/30 transition-all duration-300 shadow-2xl transform hover:scale-110">
+                    Learn More
+                </button>
+            </div>
+            
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20 flex gap-3">
+            <button onclick="goToSlide(0)" class="slider-dot w-3 h-3 rounded-full bg-white transition-all duration-300 hover:scale-125"></button>
+            <button onclick="goToSlide(1)" class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all duration-300 hover:scale-125"></button>
+            <button onclick="goToSlide(2)" class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all duration-300 hover:scale-125"></button>
+            <button onclick="goToSlide(3)" class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all duration-300 hover:scale-125"></button>
+            <button onclick="goToSlide(4)" class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all duration-300 hover:scale-125"></button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-gradient-to-b from-white via-blue-50 to-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 1s;"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-blue-100 text-blue-600 px-6 py-2 rounded-full text-sm font-semibold mb-4">
+                    WHY CHOOSE US
+                </div>
+                <h2 class="text-5xl md:text-6xl font-bold mb-4 text-gray-800">
+                    Why Choose <span class="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">Wanderlust</span>?
+                </h2>
+                <p class="text-gray-600 text-xl max-w-2xl mx-auto">
+                    Your trusted partner in creating extraordinary travel experiences
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="card-hover bg-white rounded-3xl shadow-xl p-8 text-center border border-gray-100">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Curated Experiences</h3>
+                    <p class="text-gray-600 leading-relaxed">Handpicked destinations and activities designed by travel experts for unforgettable memories.</p>
+                </div>
+                
+                <div class="card-hover bg-white rounded-3xl shadow-xl p-8 text-center border border-gray-100">
+                    <div class="bg-gradient-to-br from-yellow-400 to-yellow-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 transform -rotate-3">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Best Prices</h3>
+                    <p class="text-gray-600 leading-relaxed">Competitive rates and exclusive deals to make your dream vacation affordable and accessible.</p>
+                </div>
+                
+                <div class="card-hover bg-white rounded-3xl shadow-xl p-8 text-center border border-gray-100">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">24/7 Support</h3>
+                    <p class="text-gray-600 leading-relaxed">Round-the-clock assistance to ensure your journey is smooth and worry-free from start to finish.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinations Section -->
+    <section id="destinations" class="py-24 bg-gradient-to-b from-white to-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-yellow-100 text-yellow-600 px-6 py-2 rounded-full text-sm font-semibold mb-4">
+                    TOP DESTINATIONS
+                </div>
+                <h2 class="text-5xl md:text-6xl font-bold mb-4 text-gray-800">
+                    Popular <span class="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">Destinations</span>
+                </h2>
+                <p class="text-gray-600 text-xl max-w-2xl mx-auto">
+                    Explore some of our most loved travel packages
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="destination-card card-hover relative h-96 rounded-3xl overflow-hidden shadow-xl group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80" alt="Paris" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex items-end p-6 content">
+                        <div class="w-full">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-yellow-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>
+                            </div>
+                            <h3 class="text-white text-3xl font-bold mb-2">Paris</h3>
+                            <p class="text-white/90 mb-3">The City of Lights awaits</p>
+                            <div class="flex items-center justify-between">
+                                <p class="text-yellow-400 font-bold text-xl">From $1,299</p>
+                                <svg class="w-6 h-6 text-white transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card card-hover relative h-96 rounded-3xl overflow-hidden shadow-xl group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80" alt="Rome" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex items-end p-6 content">
+                        <div class="w-full">
+                            <h3 class="text-white text-3xl font-bold mb-2">Rome</h3>
+                            <p class="text-white/90 mb-3">Ancient history comes alive</p>
+                            <div class="flex items-center justify-between">
+                                <p class="text-yellow-400 font-bold text-xl">From $1,499</p>
+                                <svg class="w-6 h-6 text-white transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card card-hover relative h-96 rounded-3xl overflow-hidden shadow-xl group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&q=80" alt="Santorini" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex items-end p-6 content">
+                        <div class="w-full">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-blue-400 text-white text-xs font-bold px-3 py-1 rounded-full">POPULAR</span>
+                            </div>
+                            <h3 class="text-white text-3xl font-bold mb-2">Santorini</h3>
+                            <p class="text-white/90 mb-3">Greek island paradise</p>
+                            <div class="flex items-center justify-between">
+                                <p class="text-yellow-400 font-bold text-xl">From $1,799</p>
+                                <svg class="w-6 h-6 text-white transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="destination-card card-hover relative h-96 rounded-3xl overflow-hidden shadow-xl group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80" alt="Bali" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex items-end p-6 content">
+                        <div class="w-full">
+                            <h3 class="text-white text-3xl font-bold mb-2">Bali</h3>
+                            <p class="text-white/90 mb-3">Tropical island escape</p>
+                            <div class="flex items-center justify-between">
+                                <p class="text-yellow-400 font-bold text-xl">From $999</p>
+                                <svg class="w-6 h-6 text-white transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <button 
+                   class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-12 py-4 rounded-full font-bold text-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-xl transform hover:scale-105 hover:shadow-blue-500/50">
+                    View All Packages →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-pattern opacity-30"></div>
+        <div class="absolute top-10 left-10 w-72 h-72 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+        <div class="absolute bottom-10 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 1s;"></div>
+        
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div class="inline-block bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
+                🌟 LIMITED TIME OFFER
+            </div>
+            <h2 class="text-5xl md:text-6xl font-bold mb-6">
+                Ready to Start Your Adventure?
+            </h2>
+            <p class="text-xl md:text-2xl mb-12 max-w-3xl mx-auto opacity-95 leading-relaxed">
+                Join thousands of happy travelers who have discovered the world with Wanderlust. Book now and get 20% off your first trip!
+            </p>
+            <button 
+               class="bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-12 py-5 rounded-full font-bold text-xl hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-2xl transform hover:scale-110 inline-flex items-center gap-2">
+                Book Your Trip Now
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
             </button>
         </div>
+    </section>
+
+    <script>
+        // Image Slider
+        let currentSlide = 0;
+        const slides = [
+            document.getElementById('slider-img-1'),
+            document.getElementById('slider-img-2'),
+            document.getElementById('slider-img-3'),
+            document.getElementById('slider-img-4'),
+            document.getElementById('slider-img-5')
+        ];
         
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
-        </div>
-    </div>
+        if (slides[0]) {
+            const dots = document.querySelectorAll('.slider-dot');
 
-    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20 flex gap-3">
-        <button onclick="goToSlide(0)" class="slider-dot w-3 h-3 rounded-full bg-white transition-all duration-300"></button>
-        <button onclick="goToSlide(1)" class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all duration-300"></button>
-        <button onclick="goToSlide(2)" class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all duration-300"></button>
-        <button onclick="goToSlide(3)" class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all duration-300"></button>
-        <button onclick="goToSlide(4)" class="slider-dot w-3 h-3 rounded-full bg-white/40 transition-all duration-300"></button>
-    </div>
-</section>
-
-<section id="features" class="py-24 bg-gradient-to-b from-white to-gray-50">
-    <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-5xl md:text-6xl font-bold mb-4 text-gray-800">
-                Why Choose <span class="text-primary">Wanderlust</span>?
-            </h2>
-            <p class="text-gray-600 text-xl max-w-2xl mx-auto">
-                Your trusted partner in creating extraordinary travel experiences
-            </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-10">
-            <div class="card-hover bg-white rounded-2xl shadow-xl p-8 text-center">
-                <div class="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                </div>
-                <h3 class="text-2xl font-bold mb-4 text-gray-800">Curated Experiences</h3>
-                <p class="text-gray-600">Handpicked destinations and activities designed by travel experts for unforgettable memories.</p>
-            </div>
-            <div class="card-hover bg-white rounded-2xl shadow-xl p-8 text-center">
-                <div class="bg-accent/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-                <h3 class="text-2xl font-bold mb-4 text-gray-800">Best Prices</h3>
-                <p class="text-gray-600">Competitive rates and exclusive deals to make your dream vacation affordable and accessible.</p>
-            </div>
-            <div class="card-hover bg-white rounded-2xl shadow-xl p-8 text-center">
-                <div class="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                </div>
-                <h3 class="text-2xl font-bold mb-4 text-gray-800">24/7 Support</h3>
-                <p class="text-gray-600">Round-the-clock assistance to ensure your journey is smooth and worry-free from start to finish.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="py-24 bg-gray-50">
-    <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-5xl md:text-6xl font-bold mb-4 text-gray-800">
-                Popular <span class="text-primary">Destinations</span>
-            </h2>
-            <p class="text-gray-600 text-xl max-w-2xl mx-auto">
-                Explore some of our most loved travel packages
-            </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <a href="{% url 'book' %}" class="card-hover relative h-80 rounded-2xl overflow-hidden shadow-xl group cursor-pointer">
-                <img src="{% static 'images/paris.jpg' %}" alt="Paris" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
-                    <div>
-                        <h3 class="text-white text-2xl font-bold mb-2">Paris</h3>
-                        <p class="text-white/90 text-sm">From $1,299</p>
-                    </div>
-                </div>
-            </a>
-            <a href="{% url 'book' %}" class="card-hover relative h-80 rounded-2xl overflow-hidden shadow-xl group cursor-pointer">
-                <img src="{% static 'images/rome.jpg' %}" alt="Rome" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
-                    <div>
-                        <h3 class="text-white text-2xl font-bold mb-2">Rome</h3>
-                        <p class="text-white/90 text-sm">From $1,499</p>
-                    </div>
-                </div>
-            </a>
-            <a href="{% url 'book' %}" class="card-hover relative h-80 rounded-2xl overflow-hidden shadow-xl group cursor-pointer">
-                <img src="{% static 'images/santorini.jpg' %}" alt="Santorini" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
-                    <div>
-                        <h3 class="text-white text-2xl font-bold mb-2">Santorini</h3>
-                        <p class="text-white/90 text-sm">From $1,799</p>
-                    </div>
-                </div>
-            </a>
-            <a href="{% url 'book' %}" class="card-hover relative h-80 rounded-2xl overflow-hidden shadow-xl group cursor-pointer">
-                <img src="{% static 'images/bali.jpg' %}" alt="Bali" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
-                    <div>
-                        <h3 class="text-white text-2xl font-bold mb-2">Bali</h3>
-                        <p class="text-white/90 text-sm">From $999</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="text-center mt-12">
-            <a href="{% url 'book' %}" 
-               class="bg-accent text-white px-12 py-4 rounded-full font-bold text-lg hover:bg-yellow-600 transition-all duration-300 shadow-xl transform hover:scale-105">
-                View All Packages
-            </a>
-        </div>
-    </div>
-</section>
-
-<section class="py-24 bg-gradient-to-r from-primary to-accent text-white">
-    <div class="container mx-auto px-6 text-center">
-        <h2 class="text-5xl md:text-6xl font-bold mb-6">
-            Ready to Start Your Adventure?
-        </h2>
-        <p class="text-xl md:text-2xl mb-12 max-w-3xl mx-auto opacity-95">
-            Join thousands of happy travelers who have discovered the world with Wanderlust
-        </p>
-        <a href="{% url 'book' %}" 
-           class="bg-white text-primary px-12 py-5 rounded-full font-bold text-xl hover:bg-gray-100 transition-all duration-300 shadow-2xl transform hover:scale-110">
-            Book Your Trip Now
-        </a>
-    </div>
-</section>
-
-
-{% endblock content %}
-
-
-{% block body_scripts %}
-<script>
-    // Image Slider
-    let currentSlide = 0;
-    const slides = [
-        document.getElementById('slider-img-1'),
-        document.getElementById('slider-img-2'),
-        document.getElementById('slider-img-3'),
-        document.getElementById('slider-img-4'),
-        document.getElementById('slider-img-5')
-    ];
-    // A check to make sure slides exist before trying to use them
-    if (slides[0]) {
-        const dots = document.querySelectorAll('.slider-dot');
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                if(slide) slide.style.opacity = i === index ? '1' : '0';
-            });
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('bg-white', i === index);
-                dot.classList.toggle('bg-white/40', i !== index);
-            });
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }
-
-        window.goToSlide = function(index) {
-            currentSlide = index;
-            showSlide(currentSlide);
-        }
-
-        // Auto-advance slides every 5 seconds
-        setInterval(nextSlide, 5000);
-
-        // Run showSlide once on load to set the initial state
-        showSlide(currentSlide);
-    }
-
-    // Navigation Function
-    window.scrollToFeatures = function() {
-        document.getElementById('features').scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
-
-    // Smooth scroll for all internal links (if you still want any)
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if(slide) slide.style.opacity = i === index ? '1' : '0';
+                });
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('bg-white', i === index);
+                    dot.classList.toggle('bg-white/40', i !== index);
+                });
             }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            window.goToSlide = function(index) {
+                currentSlide = index;
+                showSlide(currentSlide);
+            }
+
+            setInterval(nextSlide, 5000);
+            showSlide(currentSlide);
+        }
+
+        // Navigation Functions
+        window.scrollToFeatures = function() {
+            document.getElementById('features').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        window.scrollToDestinations = function() {
+            document.getElementById('destinations').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Smooth scroll for all internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
         });
-    });
-</script>
-{% endblock body_scripts %}
+    </script>
+</body>
+</html>
