@@ -93,13 +93,13 @@ def req_home(request):
 def dashboard_redirect(request):
     user = request.user
     if user.is_staff:
-        return redirect('admin_dashboard') 
+        return redirect('agent_dashboard') 
     else:
         return redirect('req_home')
 
 @login_required
 @user_passes_test(lambda u: u.is_staff) 
-def admin_dashboard(request):
+def agent_dashboard(request):
     """View for the admin dashboard."""
     # You might want to pass all bookings, packages, or user info here
     return render(request, 'users/agent_dashboard.html')
