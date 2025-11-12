@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "users",
-    "chatbot",
     "bookings.apps.BookingsConfig",
     'guide.apps.GuideConfig',
     'crispy_forms',
