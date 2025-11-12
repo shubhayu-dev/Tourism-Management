@@ -6,3 +6,4 @@ __pycache__/
 */migrations/[0-9]*.py
 guide/migrations/
 */bookings/migrations/
+bookings/migrations/

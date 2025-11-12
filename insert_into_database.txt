@@ -32,12 +32,12 @@ p1 = Package.objects.create(
     price=14999.99
 )
 
-p2 = Package.objects.create(
-    name="Himalayan Adventure",
-    destination="Manali",
-    description="A thrilling mountain escape for adventure lovers.",
-    duration_days=7,
-    price=24999.00
+p3 = Package.objects.create(
+    name="China Exploration",
+    destination="China",
+    description="Soak in the rich culture, cuisines and monuments of China",
+    duration_days=10,
+    price=30,000.00,
 )
 
 print("✅ Added Packages:", Package.objects.all())
