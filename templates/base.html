@@ -142,7 +142,7 @@
                     
                     {% if user.is_authenticated %}
                         <span class="text-gray-600">Hi, {{ user.first_name|default:user.username }}</span>
-                        <a href="{% url 'logout' %}" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-primary-hover transition-colors">
+                        <a href="{% url 'login' %}" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-primary-hover transition-colors">
                             Logout
                         </a>
                     {% else %}
