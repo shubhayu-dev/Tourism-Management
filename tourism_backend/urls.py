@@ -19,9 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from users import views as user_views
 from bookings import views as booking_views
-from django.urls import path, include  # <-- Make sure to import include
-from chatbot import urls as chatbot_urls 
-from chatbot import views as chatbot_views
+from django.urls import path, include  
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -32,5 +30,4 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(template_name='users/logout.html', http_method_names=['get', 'post', 'options', 'head']), name="logout"),
     path('booking/create/', booking_views.create_booking, name='create_booking'),
     path('', include('users.urls')),
-    path('chatbot/', include('chatbot.urls')),
 ]
