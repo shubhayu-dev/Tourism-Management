@@ -7,6 +7,9 @@ from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
+# --- IMPORT FOR LOGOUT ---
+from django.contrib.auth import logout 
+
 # --- IMPORT BOTH of your models ---
 from bookings.models import Package, Booking 
 
@@ -85,3 +88,8 @@ def create_booking_view(request):
 
 def req_home(request):
     return render(request,'users/home.html')
+
+def logout_view(request):
+    logout(request)
+    messages.info(request, "You have been successfully logged out.")
+    return redirect('book')
