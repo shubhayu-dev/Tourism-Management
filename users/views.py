@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import user_passes_test
 
+# --- IMPORT FOR LOGOUT ---
+from django.contrib.auth import logout 
+
 # --- IMPORT BOTH of your models ---
 from bookings.models import Package, Booking 
 
@@ -100,3 +103,7 @@ def admin_dashboard(request):
     """View for the admin dashboard."""
     # You might want to pass all bookings, packages, or user info here
     return render(request, 'users/agent_dashboard.html')
+def logout_view(request):
+    logout(request)
+    messages.info(request, "You have been successfully logged out.")
+    return redirect('book')
