@@ -24,4 +24,6 @@ urlpatterns = [
     
     # Your template shows a 'Client Login' or 'My Bookings' button
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+
+    path('agent/', views.admin_dashboard, name='agent_dashboard')
 ]

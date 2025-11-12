@@ -6,6 +6,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import user_passes_test
 
 # --- IMPORT BOTH of your models ---
 from bookings.models import Package, Booking 
@@ -85,3 +86,17 @@ def create_booking_view(request):
 
 def req_home(request):
     return render(request,'users/home.html')
+
+def dashboard_redirect(request):
+    user = request.user
+    if user.is_staff:
+        return redirect('admin_dashboard') 
+    else:
+        return redirect('req_home')
+
+@login_required
+@user_passes_test(lambda u: u.is_staff) 
+def admin_dashboard(request):
+    """View for the admin dashboard."""
+    # You might want to pass all bookings, packages, or user info here
+    return render(request, 'users/agent_dashboard.html')
