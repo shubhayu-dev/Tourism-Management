@@ -32,7 +32,7 @@ p1 = Package.objects.create(
     price=14999.99
 )
 
-p3 = Package.objects.create(
+p4 = Package.objects.create(
     name="China Exploration",
     destination="China",
     description="Soak in the rich culture, cuisines and monuments of China",
@@ -45,11 +45,11 @@ print("✅ Added Packages:", Package.objects.all())
 
 If you want to test Booking too, make sure your guide app exists and at least one Guide entry is present; otherwise, leave it null:
 
-from packages.models import Booking
+from bookings.models import Booking
 
 b1 = Booking.objects.create(
-    package=p1,
-    user=user,
+    package=p5,
+    user="nikhil",
     full_name="Ravi Sharma",
     email="ravi@example.com",
     phone="9876543210",
