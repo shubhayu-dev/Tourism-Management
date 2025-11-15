@@ -1,7 +1,3 @@
-Here is a clean, well-formatted README file based on the information you provided.
-
------
-
 # Tourism and Package Management System
 
 ## 📖 Table of Contents
