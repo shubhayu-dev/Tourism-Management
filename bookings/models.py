@@ -62,7 +62,6 @@ class Booking(models.Model):
     number_of_people = models.PositiveIntegerField(default=1)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     
-    # Guide (now as ForeignKey instead of CharField)
     guide = models.ForeignKey(
         'guide.Guide',  # ← Important: app_label.ModelName
         on_delete=models.SET_NULL,
