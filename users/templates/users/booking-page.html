@@ -150,7 +150,7 @@
                         <div class="flex justify-between items-center pt-4 border-t border-gray-100 mt-auto">
                             <div>
                                 <span class="text-xs text-gray-500 block">Starting from</span>
-                                <span class="text-3xl font-bold text-primary">${{ package.price|floatformat:"0" }}</span>
+                                <span class="text-3xl font-bold text-primary">₹{{ package.price|floatformat:"0" }}</span>
                             </div>
                             
                             <button 
@@ -236,7 +236,7 @@
                         </div>
                         
                         <div class="text-left md:text-right">
-                            <p class="text-3xl font-bold text-primary mb-2">${{ booking.total_amount|floatformat:2 }}</p>
+                            <p class="text-3xl font-bold text-primary mb-2">₹{{ booking.total_amount|floatformat:2 }}</p>
                             <span class="text-sm text-gray-600">(Total)</span>
                         </div>
                     </div>
@@ -408,7 +408,7 @@ function openBookingModal(button) {
     document.getElementById('modal-title').textContent = `Book: ${button.dataset.packageName}`;
     document.getElementById('summary-package-name').textContent = button.dataset.packageName;
     document.getElementById('summary-duration').textContent = `${button.dataset.packageDuration} Days`;
-    document.getElementById('summary-price').textContent = `$${currentPackagePrice.toLocaleString()}`;
+    document.getElementById('summary-price').textContent = `₹${currentPackagePrice.toLocaleString()}`;
     
     document.getElementById('num-people').value = 1;
     updateTotalCost();
@@ -438,7 +438,7 @@ function closeBookingModal() {
 function updateTotalCost() {
     const people = parseInt(document.getElementById('num-people').value) || 1;
     const total = people * currentPackagePrice;
-    document.getElementById('summary-total').textContent = `$${total.toLocaleString()}`;
+    document.getElementById('summary-total').textContent = `₹${total.toLocaleString()}`;
 }
 
 async function completeBooking(event) {
