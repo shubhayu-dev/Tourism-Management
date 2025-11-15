@@ -6,14 +6,14 @@ Here is a clean, well-formatted README file based on the information you provide
 
 ## 📖 Table of Contents
 
-  * [📜 Abstract](https://www.google.com/search?q=%23-abstract)
-  * [✨ Key Features](https://www.google.com/search?q=%23-key-features)
-  * [🛠️ Tech Stack](https://www.google.com/search?q=%23%EF%B8%8F-tech-stack)
-  * [🚀 Project Setup](https://www.google.com/search?q=%23-project-setup)
-  * [🧪 Populating the Database (Optional)](https://www.google.com/search?q=%23-populating-the-database-optional)
-  * [🗃️ Database Schema](https://www.google.com/search?q=%23%EF%B8%8F-database-schema)
-  * [🖥️ Application Pages](https://www.google.com/search?q=%23%EF%B8%8F-application-pages)
-  * [📚 References](https://www.google.com/search?q=%23-references)
+  * [📜 Abstract]
+  * [✨ Key Features]
+  * [🛠️ Tech Stack]
+  * [🚀 Project Setup]
+  * [🧪 Populating the Database (Optional)]
+  * [🗃️ Database Schema]
+  * [🖥️ Application Pages]
+  * [📚 References]
 
 -----
 
